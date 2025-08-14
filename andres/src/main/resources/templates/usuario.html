@@ -2,9 +2,12 @@
 <html xmlns:th="http://www.thymeleaf.org"
       xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity6">
 
+<!-- Aquí no cargamos head porque eso viene de layout -->
 <body th:replace="layout :: body" th:with="contenido='usuario :: contenido'">
+</body>
 
 <div th:fragment="contenido">
+
     <div class="row mb-4">
         <div class="col-12">
             <h1 class="display-5">
@@ -45,7 +48,7 @@
         </div>
     </div>
 
-    <!-- Información y opciones -->
+    <!-- Información de cuenta -->
     <div class="row">
         <div class="col-md-8 mb-4">
             <div class="card">
@@ -55,37 +58,26 @@
                     </h5>
                 </div>
                 <div class="card-body">
-                    <div class="row">
-                        <div class="col-sm-4">
-                            <strong>Usuario:</strong>
-                        </div>
-                        <div class="col-sm-8">
-                            <span sec:authentication="name"></span>
-                        </div>
+                    <div class="row mb-2">
+                        <div class="col-sm-4"><strong>Usuario:</strong></div>
+                        <div class="col-sm-8"><span sec:authentication="name"></span></div>
                     </div>
-                    <hr>
-                    <div class="row">
-                        <div class="col-sm-4">
-                            <strong>Roles:</strong>
-                        </div>
+                    <div class="row mb-2">
+                        <div class="col-sm-4"><strong>Roles:</strong></div>
                         <div class="col-sm-8">
                             <span sec:authorize="hasRole('ADMIN')" class="badge bg-danger me-1">Administrador</span>
                             <span sec:authorize="hasRole('USER')" class="badge bg-primary me-1">Usuario</span>
                         </div>
                     </div>
-                    <hr>
                     <div class="row">
-                        <div class="col-sm-4">
-                            <strong>Estado:</strong>
-                        </div>
-                        <div class="col-sm-8">
-                            <span class="badge bg-success">Activo</span>
-                        </div>
+                        <div class="col-sm-4"><strong>Estado:</strong></div>
+                        <div class="col-sm-8"><span class="badge bg-success">Activo</span></div>
                     </div>
                 </div>
             </div>
         </div>
 
+        <!-- Acciones -->
         <div class="col-md-4 mb-4">
             <div class="card">
                 <div class="card-header bg-secondary text-white">
@@ -110,7 +102,7 @@
         </div>
     </div>
 
-    <!-- Panel adicional para administradores -->
+    <!-- Panel para administradores -->
     <div sec:authorize="hasRole('ADMIN')" class="row">
         <div class="col-12">
             <div class="card border-warning">
@@ -129,7 +121,7 @@
         </div>
     </div>
 
-    <!-- Instrucciones de uso -->
+    <!-- Instrucciones -->
     <div class="row mt-5">
         <div class="col-12">
             <div class="card bg-light">
@@ -155,7 +147,5 @@
             </div>
         </div>
     </div>
-</div>
 
-</body>
-</html>
+</div>

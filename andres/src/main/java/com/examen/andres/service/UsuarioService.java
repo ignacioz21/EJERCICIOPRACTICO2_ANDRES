@@ -44,12 +44,16 @@ public class UsuarioService {
         System.out.println("Usuario guardado con ID: " + usuarioGuardado.getUsuarioId());
 
         String rolNombre = nombreRol.startsWith("ROLE_") ? nombreRol : "ROLE_" + nombreRol;
-        Rol rol = rolDao.findByNombre(rolNombre)
-                .orElseThrow(() -> new RuntimeException("Rol no encontrado: " + rolNombre));
+        Rol rolUsuario = rolDao.findByNombre("USER")
+            .orElseGet(() -> {
+                Rol nuevoRol = new Rol();
+                nuevoRol.setNombre("USER");
+                return rolDao.save(nuevoRol);
+            });
         
-        System.out.println("Rol encontrado - ID: " + rol.getId());
+        System.out.println("Rol encontrado - ID: " + rolUsuario.getId());
 
-        UsuarioRol usuarioRol = new UsuarioRol(usuarioGuardado.getUsuarioId(), rol.getId());
+        UsuarioRol usuarioRol = new UsuarioRol(usuarioGuardado.getUsuarioId(), rolUsuario.getId());
         usuarioRolDao.save(usuarioRol);
         
         System.out.println("Relación usuario-rol creada");

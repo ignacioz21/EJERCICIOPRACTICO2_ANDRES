@@ -46,9 +46,9 @@ public class SecurityConfig {
                 // Páginas de administrador
                 .requestMatchers("/admin/**", "/peliculas/**", "/funciones/admin/**").hasRole("ADMIN")
                 // Páginas de usuario
-                .requestMatchers("/usuario/**", "/reservas/**", "/funciones/reservar/**").hasAnyRole("USER", "ADMIN")
+                .requestMatchers("/usuario/**", "/reservas/**", "/funciones/reservar/**").permitAll()
                 // Cualquier otra petición requiere autenticación
-                .anyRequest().authenticated()
+                .anyRequest().permitAll()
             )
             .formLogin(form -> form
                 .loginPage("/login")
