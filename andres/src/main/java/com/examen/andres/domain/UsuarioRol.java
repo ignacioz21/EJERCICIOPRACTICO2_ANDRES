@@ -4,7 +4,7 @@ import jakarta.persistence.*;
 import lombok.*;
 
 @Entity
-@Table(name = "usuario_rol")
+@Table(name = "usuario_roles")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -18,4 +18,13 @@ public class UsuarioRol {
     @Id
     @Column(name = "id_rol")  
     private Long idRol;
+
+    @Column(name = "fecha_asignacion")
+    private java.time.LocalDateTime fechaAsignacion = java.time.LocalDateTime.now();
+
+    public UsuarioRol(Long idUsuario, Long idRol) {
+        this.idUsuario = idUsuario;
+        this.idRol = idRol;
+        this.fechaAsignacion = java.time.LocalDateTime.now();
+    }
 }

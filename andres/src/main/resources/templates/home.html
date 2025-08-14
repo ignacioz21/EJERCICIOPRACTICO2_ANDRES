@@ -1,7 +1,112 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity6">
+
+<body th:replace="layout :: body" th:with="contenido='home :: contenido'">
+
 <div th:fragment="contenido">
-    <h1>Bienvenido a Mi Cine</h1>
-    <p>Disfruta de las mejores películas y funciones de teatro con nosotros.</p>
-    <div class="iframe-container">
-        <iframe src="https://www.youtube.com/embed/ScMzIvxBSi4" frameborder="0" allowfullscreen></iframe>
+    <!-- Hero Section -->
+    <div class="row mb-5">
+        <div class="col-12">
+            <div class="jumbotron bg-primary text-white rounded p-5 text-center">
+                <h1 class="display-4">
+                    <i class="fas fa-film me-3"></i>Bienvenido a Mi Cine
+                </h1>
+                <p class="lead">Disfruta de las mejores películas y experiencias cinematográficas</p>
+                <hr class="my-4 bg-white">
+                <p>Descubre nuestra cartelera, reserva tus entradas y vive la magia del cine</p>
+                
+                <div class="mt-4">
+                    <a class="btn btn-light btn-lg me-3" th:href="@{/cartelera}">
+                        <i class="fas fa-calendar me-2"></i>Ver Cartelera
+                    </a>
+                    <a sec:authorize="!isAuthenticated()" class="btn btn-outline-light btn-lg" th:href="@{/registro}">
+                        <i class="fas fa-user-plus me-2"></i>Regístrate
+                    </a>
+                </div>
+            </div>
+        </div>
     </div>
-</div>
+
+    <!-- Video/Trailer Section -->
+    <div class="row mb-5">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header bg-dark text-white">
+                    <h3 class="card-title mb-0">
+                        <i class="fas fa-play-circle me-2"></i>Tráiler Destacado
+                    </h3>
+                </div>
+                <div class="card-body p-0">
+                    <div class="ratio ratio-16x9">
+                        <iframe src="https://www.youtube.com/embed/ScMzIvxBSi4" 
+                                title="Tráiler Destacado"
+                                frameborder="0" 
+                                allowfullscreen></iframe>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Features Section -->
+    <div class="row mb-5">
+        <div class="col-md-4 mb-4">
+            <div class="card h-100 text-center">
+                <div class="card-body">
+                    <i class="fas fa-ticket-alt fa-3x text-primary mb-3"></i>
+                    <h4 class="card-title">Reservas Fáciles</h4>
+                    <p class="card-text">Reserva tus entradas de forma rápida y segura desde cualquier dispositivo.</p>
+                    <a sec:authorize="isAuthenticated()" th:href="@{/reservas}" class="btn btn-primary">
+                        Mis Reservas
+                    </a>
+                    <a sec:authorize="!isAuthenticated()" th:href="@{/login}" class="btn btn-primary">
+                        Iniciar Sesión
+                    </a>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-md-4 mb-4">
+            <div class="card h-100 text-center">
+                <div class="card-body">
+                    <i class="fas fa-couch fa-3x text-success mb-3"></i>
+                    <h4 class="card-title">Comodidad Total</h4>
+                    <p class="card-text">Disfruta de nuestras cómodas salas con la mejor tecnología audiovisual.</p>
+                    <a th:href="@{/cartelera}" class="btn btn-success">
+                        Ver Funciones
+                    </a>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-md-4 mb-4">
+            <div class="card h-100 text-center">
+                <div class="card-body">
+                    <i class="fas fa-popcorn fa-3x text-warning mb-3"></i>
+                    <h4 class="card-title">Experiencia Premium</h4>
+                    <p class="card-text">Ambiente perfecto para disfrutar con familia y amigos.</p>
+                    <a th:href="@{/contacto}" class="btn btn-warning text-dark">
+                        Contáctanos
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Call to Action -->
+    <div class="row">
+        <div class="col-12">
+            <div class="alert alert-info text-center">
+                <h4 class="alert-heading">
+                    <i class="fas fa-star me-2"></i>¡No te pierdas nuestros estrenos!
+                </h4>
+                <p class="mb-0">Mantente al día con las últimas películas y ofertas especiales.</p>
+                <hr>
+                <a class="btn btn-info" th:href="@{/cartelera}">
+                    <i class="fas fa-eye me-2"></i>Ver Cartelera Completa
+                </a>
+            </div>
+        </div>
+</body>
+</html>

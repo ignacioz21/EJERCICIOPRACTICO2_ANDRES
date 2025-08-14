@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Iniciar Sesión - Mi Cine</title>
+    <link th:href="@{/webjars/bootstrap/css/bootstrap.min.css}" rel="stylesheet">
+    <link th:href="@{/webjars/font-awesome/css/all.min.css}" rel="stylesheet">
+    <style>
+        body {
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+        }
+        .login-card {
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            border-radius: 15px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-md-6 col-lg-5">
+                <div class="card login-card">
+                    <div class="card-body p-5">
+                        <div class="text-center mb-4">
+                            <i class="fas fa-film fa-3x text-primary mb-3"></i>
+                            <h2 class="card-title">Mi Cine</h2>
+                            <p class="text-muted">Iniciar Sesión</p>
+                        </div>
+
+                        <!-- Alertas -->
+                        <div th:if="${param.error}" class="alert alert-danger">
+                            <i class="fas fa-exclamation-triangle me-2"></i>
+                            Usuario o contraseña incorrectos.
+                        </div>
+                        
+                        <div th:if="${param.registrado}" class="alert alert-success">
+                            <i class="fas fa-check-circle me-2"></i>
+                            Usuario registrado exitosamente. Puedes iniciar sesión.
+                        </div>
+
+                        <div th:if="${param.logout}" class="alert alert-info">
+                            <i class="fas fa-info-circle me-2"></i>
+                            Has cerrado sesión exitosamente.
+                        </div>
+
+                        <!-- Formulario de login -->
+                        <form th:action="@{/login}" method="post">
+                            <div class="mb-3">
+                                <label for="username" class="form-label">
+                                    <i class="fas fa-user me-1"></i>Usuario o Email
+                                </label>
+                                <input type="text" class="form-control form-control-lg" 
+                                       id="username" name="username" required
+                                       placeholder="Ingresa tu usuario o email">
+                            </div>
+
+                            <div class="mb-4">
+                                <label for="password" class="form-label">
+                                    <i class="fas fa-lock me-1"></i>Contraseña
+                                </label>
+                                <input type="password" class="form-control form-control-lg" 
+                                       id="password" name="password" required
+                                       placeholder="Ingresa tu contraseña">
+                            </div>
+
+                            <div class="d-grid gap-2">
+                                <button type="submit" class="btn btn-primary btn-lg">
+                                    <i class="fas fa-sign-in-alt me-2"></i>Iniciar Sesión
+                                </button>
+                            </div>
+                        </form>
+
+                        <hr class="my-4">
+
+                        <div class="text-center">
+                            <p>¿No tienes cuenta?</p>
+                            <a th:href="@{/registro}" class="btn btn-outline-primary">
+                                <i class="fas fa-user-plus me-2"></i>Registrarse
+                            </a>
+                        </div>
+
+                        <div class="text-center mt-3">
+                            <a th:href="@{/}" class="text-muted">
+                                <i class="fas fa-home me-1"></i>Volver al inicio
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script th:src="@{/webjars/bootstrap/js/bootstrap.bundle.min.js}"></script>
+</body>
+</html>

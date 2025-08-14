@@ -8,11 +8,13 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 
 @Configuration
+@EnableWebSecurity
 public class SecurityConfig {
 
     @Bean
@@ -38,17 +40,39 @@ public class SecurityConfig {
             .csrf(csrf -> csrf.disable())
             .authenticationProvider(authProvider)
             .authorizeHttpRequests(auth -> auth
-                .requestMatchers("/registro", "/css/**", "/js/**").permitAll()     
-                .requestMatchers("/admin/**").hasRole("ADMIN") 
-                .requestMatchers("/usuario/**").hasAnyRole("USER", "ADMIN", "STAFF")
+                // Recursos estáticos y páginas públicas
+                .requestMatchers("/", "/inicio", "/cartelera", "/contacto").permitAll()
+                .requestMatchers("/registro", "/css/**", "/js/**", "/images/**", "/webjars/**").permitAll()
+                // Páginas de administrador
+                .requestMatchers("/admin/**", "/peliculas/**", "/funciones/admin/**").hasRole("ADMIN")
+                // Páginas de usuario
+                .requestMatchers("/usuario/**", "/reservas/**", "/funciones/reservar/**").hasAnyRole("USER", "ADMIN")
+                // Cualquier otra petición requiere autenticación
                 .anyRequest().authenticated()
             )
             .formLogin(form -> form
                 .loginPage("/login")
-                .defaultSuccessUrl("/usuario", true)
+                .defaultSuccessUrl("/", true)
+                .successHandler((request, response, authentication) -> {
+                    String redirectUrl = "/";
+                    boolean isAdmin = authentication.getAuthorities().stream()
+                            .anyMatch(auth -> auth.getAuthority().equals("ROLE_ADMIN"));
+                    
+                    if (isAdmin) {
+                        redirectUrl = "/admin";
+                    } else {
+                        redirectUrl = "/usuario";
+                    }
+                    
+                    response.sendRedirect(redirectUrl);
+                })
                 .permitAll()
             )
-            .logout(logout -> logout.permitAll());
+            .logout(logout -> logout
+                .logoutUrl("/logout")
+                .logoutSuccessUrl("/")
+                .permitAll()
+            );
 
             return http.build();
     }

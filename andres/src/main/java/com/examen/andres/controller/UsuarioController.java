@@ -31,22 +31,41 @@ public class UsuarioController {
 
     // Registro - POST
     @PostMapping("/registro")
-    public String registrarUsuario(@ModelAttribute Usuario usuario) {
+    public String registrarUsuario(@ModelAttribute Usuario usuario, Model model) {
         try {
-            usuarioService.registrarUsuario(usuario, "ROLE_USER");
+            // Validaciones
+            if (usuario.getUsername() == null || usuario.getUsername().trim().isEmpty()) {
+                model.addAttribute("error", "El nombre de usuario es requerido");
+                return "registro";
+            }
+            
+            if (usuario.getEmail() == null || usuario.getEmail().trim().isEmpty()) {
+                model.addAttribute("error", "El email es requerido");
+                return "registro";
+            }
+            
+            if (usuario.getPassword() == null || usuario.getPassword().length() < 6) {
+                model.addAttribute("error", "La contraseña debe tener al menos 6 caracteres");
+                return "registro";
+            }
+
+            usuarioService.registrarUsuario(usuario, "USER");
             return "redirect:/login?registrado";
         } catch (Exception e) {
-            return "redirect:/registro?error";
+            model.addAttribute("error", e.getMessage());
+            return "registro";
         }
     }
 
     @GetMapping("/usuario")
-    public String usuarioHome() {
+    public String usuarioHome(Model model) {
+        model.addAttribute("titulo", "Panel de Usuario");
         return "usuario";
     }
 
     @GetMapping("/admin")
-    public String adminHome() {
+    public String adminHome(Model model) {
+        model.addAttribute("titulo", "Panel de Administración");
         return "admin";
     }
 }

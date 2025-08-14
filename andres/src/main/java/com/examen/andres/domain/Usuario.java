@@ -4,7 +4,6 @@ import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import java.util.List;
 
 @Data
 @Entity
@@ -17,19 +16,37 @@ public class Usuario {
     @Column(name = "id_usuario")
     private Long usuarioId;
 
-     @Column(nullable = false)
+    @Column(nullable = false, unique = true, length = 50)
+    private String username;
+
+    @Column(nullable = false, length = 255)
+    private String password;
+
+    @Column(nullable = false, length = 100)
     private String nombre;
 
-    @Column(nullable = false)
+    @Column(nullable = false, length = 100)
     private String apellido;
 
-    @Column(nullable = false)
+    @Column(nullable = false, unique = true, length = 100)
     private String email;
 
-    @Column(nullable = false, name = "password")
-    private String contrsena;
+    @Column(length = 15)
+    private String telefono;
 
-    @OneToMany
-    @JoinColumn(name = "id_rol", nullable = false)
-    private List<Rol> roles;
+    @Column(name = "fecha_registro")
+    private java.time.LocalDateTime fechaRegistro = java.time.LocalDateTime.now();
+
+    @Column
+    private Boolean activo = true;
+
+    public Usuario(String username, String password, String nombre, String apellido, String email) {
+        this.username = username;
+        this.password = password;
+        this.nombre = nombre;
+        this.apellido = apellido;
+        this.email = email;
+        this.activo = true;
+        this.fechaRegistro = java.time.LocalDateTime.now();
+    }
 }

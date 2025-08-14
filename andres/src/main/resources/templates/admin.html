@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<body th:replace="layout :: body" th:with="contenido='admin :: contenido'">
+
+<div th:fragment="contenido">
+    <div class="row mb-4">
+        <div class="col-12">
+            <h1 class="display-5">
+                <i class="fas fa-cog me-3"></i>Panel de Administración
+            </h1>
+            <p class="lead text-muted">Gestiona películas, funciones y reservas</p>
+        </div>
+    </div>
+
+    <!-- Estadísticas rápidas -->
+    <div class="row mb-5">
+        <div class="col-md-3 mb-4">
+            <div class="card bg-primary text-white">
+                <div class="card-body text-center">
+                    <i class="fas fa-film fa-2x mb-2"></i>
+                    <h4>Películas</h4>
+                    <p class="h5">Gestionar catálogo</p>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-md-3 mb-4">
+            <div class="card bg-success text-white">
+                <div class="card-body text-center">
+                    <i class="fas fa-calendar fa-2x mb-2"></i>
+                    <h4>Funciones</h4>
+                    <p class="h5">Programar horarios</p>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-md-3 mb-4">
+            <div class="card bg-warning text-dark">
+                <div class="card-body text-center">
+                    <i class="fas fa-ticket-alt fa-2x mb-2"></i>
+                    <h4>Reservas</h4>
+                    <p class="h5">Gestionar bookings</p>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-md-3 mb-4">
+            <div class="card bg-info text-white">
+                <div class="card-body text-center">
+                    <i class="fas fa-users fa-2x mb-2"></i>
+                    <h4>Usuarios</h4>
+                    <p class="h5">Administrar cuentas</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Acciones principales -->
+    <div class="row">
+        <div class="col-md-6 mb-4">
+            <div class="card">
+                <div class="card-header bg-primary text-white">
+                    <h5 class="mb-0">
+                        <i class="fas fa-film me-2"></i>Gestión de Películas
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <p class="card-text">Administra el catálogo de películas, agrega nuevos títulos, edita información y gestiona disponibilidad.</p>
+                    <div class="d-grid gap-2">
+                        <a th:href="@{/peliculas}" class="btn btn-primary">
+                            <i class="fas fa-list me-2"></i>Ver Todas las Películas
+                        </a>
+                        <a th:href="@{/peliculas/nueva}" class="btn btn-outline-primary">
+                            <i class="fas fa-plus me-2"></i>Agregar Nueva Película
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-6 mb-4">
+            <div class="card">
+                <div class="card-header bg-success text-white">
+                    <h5 class="mb-0">
+                        <i class="fas fa-calendar me-2"></i>Gestión de Funciones
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <p class="card-text">Programa horarios de funciones, asigna salas y establece precios para cada proyección.</p>
+                    <div class="d-grid gap-2">
+                        <a th:href="@{/funciones/admin}" class="btn btn-success">
+                            <i class="fas fa-list me-2"></i>Ver Todas las Funciones
+                        </a>
+                        <a th:href="@{/funciones/admin/nueva}" class="btn btn-outline-success">
+                            <i class="fas fa-plus me-2"></i>Programar Nueva Función
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-6 mb-4">
+            <div class="card">
+                <div class="card-header bg-warning text-dark">
+                    <h5 class="mb-0">
+                        <i class="fas fa-ticket-alt me-2"></i>Gestión de Reservas
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <p class="card-text">Supervisa todas las reservas realizadas, gestiona cancelaciones y controla ocupación.</p>
+                    <div class="d-grid gap-2">
+                        <a th:href="@{/admin/reservas}" class="btn btn-warning text-dark">
+                            <i class="fas fa-eye me-2"></i>Ver Todas las Reservas
+                        </a>
+                        <a th:href="@{/admin/reportes}" class="btn btn-outline-warning">
+                            <i class="fas fa-chart-bar me-2"></i>Reportes de Ocupación
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-6 mb-4">
+            <div class="card">
+                <div class="card-header bg-info text-white">
+                    <h5 class="mb-0">
+                        <i class="fas fa-users me-2"></i>Gestión de Usuarios
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <p class="card-text">Administra cuentas de usuarios, asigna roles y gestiona permisos del sistema.</p>
+                    <div class="d-grid gap-2">
+                        <a th:href="@{/admin/usuarios}" class="btn btn-info">
+                            <i class="fas fa-users me-2"></i>Ver Todos los Usuarios
+                        </a>
+                        <a th:href="@{/admin/usuarios/nuevo}" class="btn btn-outline-info">
+                            <i class="fas fa-user-plus me-2"></i>Crear Nuevo Usuario
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Accesos rápidos -->
+    <div class="row">
+        <div class="col-12">
+            <div class="card bg-light">
+                <div class="card-body">
+                    <h5 class="card-title">
+                        <i class="fas fa-bolt me-2"></i>Accesos Rápidos
+                    </h5>
+                    <div class="btn-group" role="group">
+                        <a th:href="@{/}" class="btn btn-outline-secondary">
+                            <i class="fas fa-home me-1"></i>Ver Sitio
+                        </a>
+                        <a th:href="@{/cartelera}" class="btn btn-outline-secondary">
+                            <i class="fas fa-eye me-1"></i>Ver Cartelera
+                        </a>
+                        <a th:href="@{/contacto}" class="btn btn-outline-secondary">
+                            <i class="fas fa-envelope me-1"></i>Mensajes de Contacto
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>

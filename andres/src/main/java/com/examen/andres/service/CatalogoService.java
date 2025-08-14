@@ -12,34 +12,42 @@ public class CatalogoService {
 
     private final PeliculaDao peliculaDao;
     private final FuncionDao funcionDao;
+    private final SalaDao salaDao;
 
-    public CatalogoService(PeliculaDao peliculaDao, FuncionDao funcionDao) {
+    public CatalogoService(PeliculaDao peliculaDao, FuncionDao funcionDao, SalaDao salaDao) {
         this.peliculaDao = peliculaDao;
         this.funcionDao = funcionDao;
+        this.salaDao = salaDao;
     }
 
+    // Películas
     public List<Pelicula> listarPeliculas() {
         return peliculaDao.findAll();
     }
 
-    public Optional<Pelicula> peliculaName(Pelicula pelicula){
-        return peliculaDao.findByTitulo(pelicula.getTitulo());
+    public Optional<Pelicula> peliculaName(String titulo){
+        return peliculaDao.findByTitulo(titulo);
     }
 
-    public void savePeli(Pelicula pelicual) {
-        peliculaDao.save(pelicual);
+    public Optional<Pelicula> peliculaPorId(Long id) {
+        return peliculaDao.findById(id);
+    }
+
+    public void savePeli(Pelicula pelicula) {
+        peliculaDao.save(pelicula);
     }
 
     public void delPeli(Pelicula pelicula) {
         peliculaDao.delete(pelicula);
     }
 
+    // Funciones
     public List<Funcion> listarFunciones() {
         return funcionDao.findAll();
     }
 
-    public Optional<Funcion> funcionId(Funcion funcion){
-        return funcionDao.findById(funcion.getId());
+    public Optional<Funcion> funcionPorId(Integer id){
+        return funcionDao.findById(id);
     }
 
     public void saveFuncion(Funcion funcion){
@@ -50,6 +58,20 @@ public class CatalogoService {
         funcionDao.delete(funcion);
     }
 
-    
+    // Salas
+    public List<Sala> listarSalas() {
+        return salaDao.findAll();
+    }
 
+    public Optional<Sala> salaPorId(Integer id) {
+        return salaDao.findById(id);
+    }
+
+    public void saveSala(Sala sala) {
+        salaDao.save(sala);
+    }
+
+    public void delSala(Sala sala) {
+        salaDao.delete(sala);
+    }
 }

@@ -5,6 +5,7 @@ import lombok.*;
 
 @Entity
 @Table(name = "salas")
+@Data
 @NoArgsConstructor 
 @AllArgsConstructor
 public class Sala {
@@ -12,7 +13,7 @@ public class Sala {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id_sala")
-    private Long id;
+    private Integer id;
 
     @Column(name = "nombre_sala", nullable = false, length = 50)
     private String nombreSala;

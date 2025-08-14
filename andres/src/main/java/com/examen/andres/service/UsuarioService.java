@@ -29,23 +29,27 @@ public class UsuarioService {
     public Usuario registrarUsuario(Usuario usuario, String nombreRol) {
         System.out.println("Registrando usuario: " + usuario.getEmail());
         
-        // Encriptar contraseña
-        usuario.setContrsena(passwordEncoder.encode(usuario.getContrsena()));
+        // Validar que el email y username no existan
+        if (usuarioDao.existsByEmail(usuario.getEmail())) {
+            throw new RuntimeException("El email ya está registrado");
+        }
         
-        // Guardar usuario primero
+        if (usuarioDao.existsByUsername(usuario.getUsername())) {
+            throw new RuntimeException("El nombre de usuario ya existe");
+        }
+        
+        usuario.setPassword(passwordEncoder.encode(usuario.getPassword()));
+        
         Usuario usuarioGuardado = usuarioDao.save(usuario);
         System.out.println("Usuario guardado con ID: " + usuarioGuardado.getUsuarioId());
 
-        // Buscar el rol
-        Rol rol = rolDao.findByNombre(nombreRol)
-                .orElseThrow(() -> new RuntimeException("Rol no encontrado: " + nombreRol));
+        String rolNombre = nombreRol.startsWith("ROLE_") ? nombreRol : "ROLE_" + nombreRol;
+        Rol rol = rolDao.findByNombre(rolNombre)
+                .orElseThrow(() -> new RuntimeException("Rol no encontrado: " + rolNombre));
         
         System.out.println("Rol encontrado - ID: " + rol.getId());
 
-        // Crear la relación usuario-rol
-        UsuarioRol usuarioRol = new UsuarioRol();
-        usuarioRol.setIdUsuario(usuarioGuardado.getUsuarioId());
-        usuarioRol.setIdRol(rol.getId());
+        UsuarioRol usuarioRol = new UsuarioRol(usuarioGuardado.getUsuarioId(), rol.getId());
         usuarioRolDao.save(usuarioRol);
         
         System.out.println("Relación usuario-rol creada");
@@ -57,11 +61,23 @@ public class UsuarioService {
         return usuarioDao.findByEmail(email);
     }
 
+    public Optional<Usuario> buscarPorUsername(String username) {
+        return usuarioDao.findByUsername(username);
+    }
+
     public List<Usuario> listar(){
         return usuarioDao.findAll();
     }
 
     public List<Long> obtenerRolesDeUsuario(Long idUsuario) {
         return usuarioRolDao.findRolesByUsuarioId(idUsuario);
+    }
+
+    public boolean existeEmail(String email) {
+        return usuarioDao.existsByEmail(email);
+    }
+
+    public boolean existeUsername(String username) {
+        return usuarioDao.existsByUsername(username);
     }
 }

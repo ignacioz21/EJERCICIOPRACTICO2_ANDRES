@@ -26,16 +26,18 @@ public class CustomUserDetailsService implements UserDetailsService {
     }
 
     @Override
-    public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
-        System.out.println("Intentando autenticar usuario: " + email);
+    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+        System.out.println("Intentando autenticar usuario: " + username);
         
-        Usuario nuevoUsuario = usuarioDao.findByEmail(email)
-                .orElseThrow(() -> new UsernameNotFoundException("Usuario no encontrado: " + email));
+        // Primero intentar por email, luego por username
+        Usuario usuario = usuarioDao.findByEmail(username)
+                .orElse(usuarioDao.findByUsername(username)
+                        .orElseThrow(() -> new UsernameNotFoundException("Usuario no encontrado: " + username)));
 
-        System.out.println("Usuario encontrado: " + nuevoUsuario.getEmail());
+        System.out.println("Usuario encontrado: " + usuario.getEmail());
         
         // Obtener IDs de roles del usuario
-        List<Long> rolesIds = usuarioRolDao.findRolesByUsuarioId(nuevoUsuario.getUsuarioId());
+        List<Long> rolesIds = usuarioRolDao.findRolesByUsuarioId(usuario.getUsuarioId());
         System.out.println("IDs de roles del usuario: " + rolesIds);
 
         // Obtener los roles basados en los IDs
@@ -44,16 +46,21 @@ public class CustomUserDetailsService implements UserDetailsService {
         
         List<SimpleGrantedAuthority> authorities = roles.stream()
                 .map(rol -> {
-                    System.out.println("Asignando autoridad: " + rol.getNombre());
-                    return new SimpleGrantedAuthority(rol.getNombre());
+                    String authority = rol.getNombre().startsWith("ROLE_") ? rol.getNombre() : "ROLE_" + rol.getNombre();
+                    System.out.println("Asignando autoridad: " + authority);
+                    return new SimpleGrantedAuthority(authority);
                 })
                 .collect(Collectors.toList());
 
         System.out.println("Autoridades finales: " + authorities);
 
         return new org.springframework.security.core.userdetails.User(
-                nuevoUsuario.getEmail(),
-                nuevoUsuario.getContrsena(),
+                usuario.getUsername(),
+                usuario.getPassword(),
+                usuario.getActivo(),
+                true, // accountNonExpired
+                true, // credentialsNonExpired  
+                true, // accountNonLocked
                 authorities
         );
     }
