@@ -1,0 +1,12 @@
+<div th:fragment="contenido">
+    <h1>Cartelera</h1>
+    <div class="grid">
+        <div class="card" th:each="f : ${funciones}">
+            <h2 th:text="${f.pelicula.titulo}"></h2>
+            <p th:text="'Género: ' + ${f.pelicula.genero}"></p>
+            <p th:text="'Duración: ' + ${f.pelicula.duracion} + ' min'"></p>
+            <p th:text="'Fecha: ' + ${f.fecha}"></p>
+            <p th:text="'Hora: ' + ${f.hora}"></p>
+        </div>
+    </div>
+</div>

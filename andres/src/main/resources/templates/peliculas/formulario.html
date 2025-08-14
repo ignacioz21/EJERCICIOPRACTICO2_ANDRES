@@ -1,0 +1,21 @@
+<div th:fragment="contenido">
+    <h1 th:text="${pelicula.id != null ? 'Editar Película' : 'Nueva Película'}"></h1>
+    <form th:action="@{/peliculas}" th:object="${pelicula}" method="post">
+        <label>Título:</label>
+        <input type="text" th:field="*{titulo}" required>
+
+        <label>Género:</label>
+        <input type="text" th:field="*{genero}" required>
+
+        <label>Duración (min):</label>
+        <input type="number" th:field="*{duracion}" required>
+
+        <label>Descripción:</label>
+        <textarea th:field="*{descripcion}"></textarea>
+
+        <label>Trailer URL:</label>
+        <input type="url" th:field="*{trailerUrl}">
+
+        <button type="submit" class="btn">Guardar</button>
+    </form>
+</div>

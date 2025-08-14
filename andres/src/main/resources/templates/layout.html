@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title th:text="${titulo}">Cine</title>
+    <link rel="stylesheet" th:href="@{/css/styles.css}">
+</head>
+<body>
+<header>
+    <div class="logo">Mi Cine</div>
+    <nav>
+        <a th:href="@{/}">Inicio</a>
+        <a th:href="@{/cartelera}">Cartelera</a>
+        <a th:href="@{/peliculas}">Películas</a>
+        <a th:href="@{/funciones}">Funciones</a>
+        <a th:href="@{/reservas}">Reservas</a>
+        <a th:href="@{/contacto}">Contacto</a>
+    </nav>
+</header>
+
+<main>
+    <section th:replace="${contenido}"></section>
+</main>
+
+<footer>
+    <p>&copy; 2025 Mi Cine - Todos los derechos reservados</p>
+</footer>
+</body>
+</html>

@@ -1,0 +1,16 @@
+<div th:fragment="contenido">
+    <h1>Películas</h1>
+    <a class="btn" th:href="@{/peliculas/nueva}">+ Nueva Película</a>
+    <table>
+        <tr><th>Título</th><th>Género</th><th>Duración</th><th>Acciones</th></tr>
+        <tr th:each="p : ${peliculas}">
+            <td th:text="${p.titulo}"></td>
+            <td th:text="${p.genero}"></td>
+            <td th:text="${p.duracion} + ' min'"></td>
+            <td>
+                <a th:href="@{/peliculas/editar/{id}(id=${p.id})}">✏️</a>
+                <a th:href="@{/peliculas/eliminar/{id}(id=${p.id})}">🗑️</a>
+            </td>
+        </tr>
+    </table>
+</div>
