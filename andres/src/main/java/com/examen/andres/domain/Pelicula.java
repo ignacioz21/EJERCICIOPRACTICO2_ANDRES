@@ -8,6 +8,8 @@ import java.time.LocalDate;
 @Table(name = "peliculas")
 @NoArgsConstructor 
 @AllArgsConstructor
+@Getter
+@Setter
 public class Pelicula {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

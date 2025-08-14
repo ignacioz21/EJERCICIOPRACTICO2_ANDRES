@@ -10,6 +10,7 @@ import java.time.LocalTime;
 @Table(name = "funciones")
 @NoArgsConstructor 
 @AllArgsConstructor
+@Getter@Setter
 public class Funcion {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
