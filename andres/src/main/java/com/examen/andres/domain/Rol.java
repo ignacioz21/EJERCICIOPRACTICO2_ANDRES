@@ -17,6 +17,9 @@ public class Rol {
     @Column(nullable = false, unique = true)
     private String nombre;
 
+    @Column(columnDefinition = "TEXT")
     private String descripcion;
 
+    @Column(name = "fecha_creacion")
+    private java.time.LocalDateTime fechaCreacion;
 }
