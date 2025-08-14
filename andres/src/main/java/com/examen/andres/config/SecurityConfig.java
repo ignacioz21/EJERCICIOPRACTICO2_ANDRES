@@ -1,5 +1,7 @@
 package com.examen.andres.config;
 
+import com.examen.andres.security.*;
+
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -10,13 +12,22 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 
-
 @Configuration
 public class SecurityConfig {
 
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
+    }
+
+    @Bean
+    public DaoAuthenticationProvider authenticationProvider(
+            CustomUserDetailsService userDetailsService, 
+            PasswordEncoder passwordEncoder) {
+        DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider();
+        authProvider.setUserDetailsService(userDetailsService);
+        authProvider.setPasswordEncoder(passwordEncoder);
+        return authProvider;
     }
 
     @Bean
@@ -27,9 +38,9 @@ public class SecurityConfig {
             .csrf(csrf -> csrf.disable())
             .authenticationProvider(authProvider)
             .authorizeHttpRequests(auth -> auth
-                .requestMatchers("/registro", "/css/**", "/js/**", "/home").permitAll()     // registro/login públicos
-                .requestMatchers("/admin/**").hasRole("ADMIN") // requiere ROLE_ADMIN
-                .requestMatchers("/usuario/**").hasAnyRole("ROLE_USER", "ROLE_ADMIN")
+                .requestMatchers("/registro", "/css/**", "/js/**").permitAll()     
+                .requestMatchers("/admin/**").hasRole("ADMIN") 
+                .requestMatchers("/usuario/**").hasAnyRole("USER", "ADMIN", "STAFF")
                 .anyRequest().authenticated()
             )
             .formLogin(form -> form
@@ -46,5 +57,4 @@ public class SecurityConfig {
     public AuthenticationManager authenticationManager(AuthenticationConfiguration config) throws Exception {
         return config.getAuthenticationManager();
     }
-
 }

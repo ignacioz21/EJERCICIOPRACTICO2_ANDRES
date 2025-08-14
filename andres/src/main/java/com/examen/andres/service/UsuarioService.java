@@ -1,39 +1,56 @@
 package com.examen.andres.service;
 
-import com.examen.andres.dao.*;
 import com.examen.andres.domain.*;
-
+import com.examen.andres.dao.*;
 import java.util.List;
 import java.util.Optional;
-import java.util.*;
 
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class UsuarioService {  
 
     private final UsuarioDao usuarioDao;
     private final RolDao rolDao;
-    private final BCryptPasswordEncoder passwordEncoder;
+    private final UsuarioRolDao usuarioRolDao;
+    private final PasswordEncoder passwordEncoder;
 
-    public UsuarioService(UsuarioDao usuarioDao, RolDao rolDao, BCryptPasswordEncoder passwordEncoder) {
+    public UsuarioService(UsuarioDao usuarioDao, RolDao rolDao, 
+                         UsuarioRolDao usuarioRolDao, PasswordEncoder passwordEncoder) {
         this.usuarioDao = usuarioDao;
         this.rolDao = rolDao;
+        this.usuarioRolDao = usuarioRolDao;
         this.passwordEncoder = passwordEncoder;
     }
 
+    @Transactional
     public Usuario registrarUsuario(Usuario usuario, String nombreRol) {
+        System.out.println("Registrando usuario: " + usuario.getEmail());
+        
+        // Encriptar contraseña
         usuario.setContrsena(passwordEncoder.encode(usuario.getContrsena()));
+        
+        // Guardar usuario primero
+        Usuario usuarioGuardado = usuarioDao.save(usuario);
+        System.out.println("Usuario guardado con ID: " + usuarioGuardado.getUsuarioId());
 
+        // Buscar el rol
         Rol rol = rolDao.findByNombre(nombreRol)
-                .orElseThrow(() -> new RuntimeException("Rol no encontrado"));
+                .orElseThrow(() -> new RuntimeException("Rol no encontrado: " + nombreRol));
+        
+        System.out.println("Rol encontrado - ID: " + rol.getId());
 
-        List<Rol> roles = new ArrayList<>();
-        roles.add(rol);
-        usuario.setRoles(roles);
-
-        return usuarioDao.save(usuario);
+        // Crear la relación usuario-rol
+        UsuarioRol usuarioRol = new UsuarioRol();
+        usuarioRol.setIdUsuario(usuarioGuardado.getUsuarioId());
+        usuarioRol.setIdRol(rol.getId());
+        usuarioRolDao.save(usuarioRol);
+        
+        System.out.println("Relación usuario-rol creada");
+        
+        return usuarioGuardado;
     }
 
     public Optional<Usuario> buscarPorEmail(String email) {
@@ -44,4 +61,7 @@ public class UsuarioService {
         return usuarioDao.findAll();
     }
 
+    public List<Long> obtenerRolesDeUsuario(Long idUsuario) {
+        return usuarioRolDao.findRolesByUsuarioId(idUsuario);
+    }
 }
